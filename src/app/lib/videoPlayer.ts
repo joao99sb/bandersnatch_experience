@@ -1,7 +1,9 @@
 import React, { ReactElement } from "react";
+import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 import { Network } from "./network";
 import { ModalButton } from "../components/ModalButton";
+import { buttonFunction } from "./func";
 
 type objectJSONType = Record<string, any>;
 type videoReactElement = React.RefObject<HTMLVideoElement>;
@@ -89,7 +91,14 @@ export class VideoMediaPlayer {
   }
 
   public waitForQuestions() {
-    this.options = this.selectedPart.options;
+    this.configureModal(this.selectedPart.options);
+  }
+
+  private configureModal(options: string[]) {
+    const buttons = buttonFunction(options);
+    if (this.modal.current) {
+      ReactDOM.render(buttons, this.modal.current);
+    }
   }
 
   private async processBufferSegment(allSegments: BufferSource) {

@@ -3,16 +3,11 @@ import React, { useRef, useEffect, useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
-import { ModalButton } from "../components/ModalButton";
-
 import MANIFEST_URL from "./manifest.json";
 import { Network, VideoMediaPlayer } from "../lib";
 const localhost = ["127.0.0.1", "localhost"];
 
 export default async function Streaming() {
-  const [options1, setOptions1] = useState("a");
-  const [options2, setOptions2] = useState("d");
-  const [options, setOptions] = useState(["q", "s"]);
   const videoRef = useRef<HTMLVideoElement>(null);
   const modal = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -22,34 +17,36 @@ export default async function Streaming() {
   const host = isLocal ? MANIFEST_URL.localHost : MANIFEST_URL.productionHost;
 
   const network = new Network(host);
-  const videoMediaPlayer = new VideoMediaPlayer({
-    manifestJSON: MANIFEST_URL,
-    network: network,
-  });
+
+  const videoMediaPlayer = useRef<VideoMediaPlayer>(
+    new VideoMediaPlayer({
+      manifestJSON: MANIFEST_URL,
+      network,
+    })
+  );
 
   useEffect(() => {
-    videoMediaPlayer.initializeCodec(videoRef, modal);
+    videoMediaPlayer.current.initializeCodec(videoRef, modal);
 
     videoRef.current?.addEventListener("play", closeModal);
     videoRef.current?.addEventListener("pause", openModal);
+
+    return () => {
+      videoRef.current?.removeEventListener("play", closeModal);
+      videoRef.current?.removeEventListener("pause", openModal);
+    };
   }, []);
 
-  useEffect(() => {
-    console.log(videoMediaPlayer.options);
-    setOptions1(videoMediaPlayer.options[0]);
-    setOptions2(videoMediaPlayer.options[1]);
-  }, [videoMediaPlayer.options]);
-
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     if (modal.current) {
       modal.current.style.display = "none";
     }
-  };
-  const openModal = () => {
+  }, []);
+  const openModal = useCallback(() => {
     if (modal.current) {
       modal.current.style.display = "flex";
     }
-  };
+  }, []);
 
   return (
     <div
@@ -95,10 +92,7 @@ export default async function Streaming() {
         items-center
         gap-[30vw] 
         `}
-      >
-        <ModalButton option={options[0]} />
-        <ModalButton option={options[1]} />
-      </div>
+      ></div>
     </div>
   );
 }
