@@ -22,6 +22,8 @@ export class VideoMediaPlayer {
   selectedPart: any;
   videoDuration: number;
   modal: divReactElement;
+  activeItem: any;
+  setIntervalId: NodeJS.Timer | null;
 
   options: string[];
   constructor({ manifestJSON, network }: VideoMediaPlayerInterface) {
@@ -33,6 +35,8 @@ export class VideoMediaPlayer {
     this.selectedPart = {};
     this.modal = {} as divReactElement;
     this.options = [];
+    this.activeItem = {};
+    this.setIntervalId = null;
   }
 
   public initializeCodec(videoRef: videoReactElement, modal: divReactElement) {
@@ -59,14 +63,21 @@ export class VideoMediaPlayer {
     }
   }
 
+  public clearInterval() {
+    if (this.setIntervalId) {
+      clearInterval(this.setIntervalId);
+      this.setIntervalId = null;
+    }
+  }
   private async handleSourceOpen(mediaSource: MediaSource) {
     this.sourceBuffer = mediaSource.addSourceBuffer(this.manifestJSON.codec);
     this.selectedPart = this.manifestJSON.intro;
+    this.activeItem = this.selectedPart;
     const selectedPart = this.selectedPart;
     mediaSource.duration = this.videoDuration;
     await this.fileDownload(selectedPart.url);
 
-    this.waitForQuestions();
+    this.setIntervalId = setInterval(this.waitForQuestions.bind(this), 200);
   }
 
   private async fileDownload(url: string) {
@@ -89,13 +100,41 @@ export class VideoMediaPlayer {
     const [name, videoDuration] = bars[bars.length - 1].split("-");
     this.videoDuration += Number(videoDuration);
   }
+  public async nextChunck(data: string) {
+    const key = data.toLowerCase();
+    const selected = this.manifestJSON[key];
+    console.log("asdhaosdhaoshdoia", this.manifestJSON[key]);
 
+    this.selectedPart = {
+      ...selected,
+
+      // Adjust the timing when the modal will appear, based on current time
+      at: parseInt(this.videoElement.current?.currentTime + selected.at),
+    };
+
+    this.videoElement.current?.play();
+    await this.fileDownload(selected.url);
+  }
   public waitForQuestions() {
+    const currentTime = this.videoElement.current
+      ?.currentTime as unknown as string;
+
+    const currentTimeInt = parseInt(currentTime);
+
+    const option = this.selectedPart.at === currentTimeInt;
+    if (!option) return;
+    if (this.activeItem.url === this.selectedPart.ulr) return;
+
     this.configureModal(this.selectedPart.options);
+    this.activeItem = this.selectedPart;
   }
 
   private configureModal(options: string[]) {
-    const buttons = buttonFunction(options);
+    this.videoElement.current?.pause();
+    if (this.modal.current) {
+      this.modal.current.style.display = "flex";
+    }
+    const buttons = buttonFunction(options, this.nextChunck.bind(this));
     if (this.modal.current) {
       ReactDOM.render(buttons, this.modal.current);
     }

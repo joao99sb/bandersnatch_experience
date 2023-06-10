@@ -11,9 +11,12 @@ import { AppStore } from "../store/store";
 
 interface ModalButtonProps {
   option: string;
+  nextChunck: any;
 }
-export const ModalButton: React.FC<ModalButtonProps> = ({ option }) => {
-
+export const ModalButton: React.FC<ModalButtonProps> = ({
+  option,
+  nextChunck,
+}) => {
   return (
     <button
       className="
@@ -35,9 +38,7 @@ export const ModalButton: React.FC<ModalButtonProps> = ({ option }) => {
         transition
 
         "
-      onClick={() => {
-        // alert(option);
-      }}
+      onClick={() => nextChunck(option)}
     >
       {option}
     </button>

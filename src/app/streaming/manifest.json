@@ -31,7 +31,8 @@
         ],
         "defaultOptions": "Finalizar"
     },
-    "end": {
-        "url": "$HOST/videos/03.encerramento/03.encerramento-4.733333-$RESOLUTION.mp4"
+    "finalizar": {
+        "url": "$HOST/videos/03.encerramento/03.encerramento-4.733333-$RESOLUTION.mp4",
+        "at":30
     }
 }

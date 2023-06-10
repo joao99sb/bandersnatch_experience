@@ -18,22 +18,19 @@ export default async function Streaming() {
 
   const network = new Network(host);
 
-  const videoMediaPlayer = useRef<VideoMediaPlayer>(
-    new VideoMediaPlayer({
-      manifestJSON: MANIFEST_URL,
-      network,
-    })
-  );
+  let videoMediaPlayer = new VideoMediaPlayer({
+    manifestJSON: MANIFEST_URL,
+    network,
+  });
 
   useEffect(() => {
-    videoMediaPlayer.current.initializeCodec(videoRef, modal);
+    videoMediaPlayer.initializeCodec(videoRef, modal);
 
     videoRef.current?.addEventListener("play", closeModal);
-    videoRef.current?.addEventListener("pause", openModal);
 
     return () => {
+      videoMediaPlayer.clearInterval();
       videoRef.current?.removeEventListener("play", closeModal);
-      videoRef.current?.removeEventListener("pause", openModal);
     };
   }, []);
 
@@ -47,6 +44,11 @@ export default async function Streaming() {
       modal.current.style.display = "flex";
     }
   }, []);
+
+  const getBackRouter = useCallback(() => {
+    videoMediaPlayer.clearInterval();
+    router.back();
+  }, [videoMediaPlayer]);
 
   return (
     <div
@@ -73,7 +75,7 @@ export default async function Streaming() {
         <AiOutlineArrowLeft
           className="text-white cursor-pointer"
           size={40}
-          onClick={() => router.back()}
+          onClick={getBackRouter}
         />
         <p className=" text-white text-1xl md:text-3xl font-bold ">
           <span className=" font-light ">Whatching: </span>
