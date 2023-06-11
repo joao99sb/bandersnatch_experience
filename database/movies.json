@@ -34,5 +34,11 @@
         "thumbnailUrl": "https://download.blender.org/ED/cover.jpg",
         "genre": "Sci-Fi",
         "duration": "15 minutes"
+    },
+    {
+        "id": 5,
+        "title": "Black Mirror Bandersnatch Experience",
+        "description": "Get ready for an immersion in the Bandersnatch experience, my very own version created to surprise everyone.",
+        "thumbnailUrl": "https://e1.pxfuel.com/desktop-wallpaper/746/579/desktop-wallpaper-black-mirror-bandersnatch.jpg"
     }
 ]

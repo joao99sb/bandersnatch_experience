@@ -1,35 +1,40 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { MovieInterface } from "./types";
-import { getMovies } from "../api";
+import { getMovieFromId } from "../api";
 import { PlayButton } from "./PlayButton";
 import { setInfoModalMovieId, setInfoModalStatus } from "../store/infoModal";
-import { AppStore } from "../store/store";
-const getBillboard = (): MovieInterface => {
-  const moviesData = getMovies();
+import MANIFEST from "../streaming/manifest.json";
+import { Network } from "../lib";
 
-  const movieCount = moviesData.length;
-  const randomIndex = Math.floor(Math.random() * movieCount);
-  const randomFilm = moviesData[randomIndex];
-  return randomFilm;
-};
+const localhost = ["127.0.0.1", "localhost"];
+
 export const Billboard = () => {
-  const [randomFilm, setRandomFilm] = useState<MovieInterface>(
-    {} as MovieInterface
-  );
+  const [movie, setMovie] = useState<MovieInterface>({} as MovieInterface);
   const dispatch = useDispatch();
 
+  const isLocal = !!~localhost.indexOf(window.location.hostname);
+
+  const host = isLocal ? MANIFEST.localHost : MANIFEST.productionHost;
+  const network = new Network(host);
+
   useEffect(() => {
-    const movie = getBillboard();
-    setRandomFilm(movie);
-  }, [randomFilm]);
+    const moviesData = getMovieFromId(5) as MovieInterface;
+
+    const url = "$HOST/videos/Black_Mirror_Bandersnatch_Trailer.mp4";
+    const finalUrl = network.parseBillBoardManifestURL({
+      hostTag: MANIFEST.hostTag,
+      url,
+    });
+    moviesData.videoUrl = finalUrl;
+    setMovie(moviesData);
+  }, [movie]);
 
   const handleInfoModal = useCallback(() => {
-    (randomFilm.id);
-    dispatch(setInfoModalMovieId(randomFilm.id));
+    dispatch(setInfoModalMovieId(movie));
     dispatch(setInfoModalStatus(true));
-  }, [randomFilm]);
+  }, [movie]);
 
   return (
     <div className="relative h-[56.25vw]">
@@ -43,8 +48,8 @@ export const Billboard = () => {
         autoPlay
         muted
         loop
-        poster={randomFilm?.thumbnailUrl}
-        src={randomFilm?.videoUrl}
+        poster={movie?.thumbnailUrl}
+        src={movie?.videoUrl}
       ></video>
 
       <div
@@ -67,7 +72,7 @@ export const Billboard = () => {
         drop-shadow-xl
         "
         >
-          {randomFilm.title}
+          {movie.title}
         </p>
         <p
           className="text-white
@@ -81,11 +86,11 @@ export const Billboard = () => {
             drop-shadow-xl
             "
         >
-          {randomFilm.description}
+          {movie.description}
         </p>
 
         <div className="flex flex-row items-center mt-3 md:mt-4 gap-3">
-          <PlayButton movieId={randomFilm.id} />
+          <PlayButton movieId={movie.id} />
           <button
             onClick={handleInfoModal}
             className="

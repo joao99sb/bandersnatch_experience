@@ -1,15 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { BsFillPlayFill } from "react-icons/bs";
 import { MovieInterface } from "./types";
 import { FavoriteButton } from "./FavoriteButton";
+import { useRouter } from "next/navigation";
 
 interface MovieCardProps {
   movie: MovieInterface;
 }
 
 export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+  const router = useRouter();
+
+  const redirectToWatch = useCallback(
+    () => router.push(`/watch/${movie.id}`),
+    [router, movie.id]
+  );
   return (
     <div className="group bg-zinc-900 col-span relative h-[12vw]">
       <img
@@ -83,9 +90,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
             "
           >
             <div
-              onClick={() => {
-                console.log("oi");
-              }}
+              onClick={redirectToWatch}
               className="
                 cursor-pointer
                 w-6

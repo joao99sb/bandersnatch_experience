@@ -103,7 +103,6 @@ export class VideoMediaPlayer {
   public async nextChunck(data: string) {
     const key = data.toLowerCase();
     const selected = this.manifestJSON[key];
-    console.log("asdhaosdhaoshdoia", this.manifestJSON[key]);
 
     this.selectedPart = {
       ...selected,

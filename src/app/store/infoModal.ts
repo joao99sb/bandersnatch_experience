@@ -5,12 +5,12 @@ import { HYDRATE } from "next-redux-wrapper";
 
 export interface InfoModalStatusInterface {
   infoModalStatus: boolean;
-  modalId?: number;
+  movie?: number;
 }
 
 const initialState: InfoModalStatusInterface = {
   infoModalStatus: false,
-  modalId: undefined,
+  movie: undefined,
 };
 
 export const infoModalSlice = createSlice({
@@ -22,7 +22,7 @@ export const infoModalSlice = createSlice({
       state.infoModalStatus = action.payload;
     },
     setInfoModalMovieId(state, action) {
-      state.modalId = action.payload;
+      state.movie = action.payload;
     },
   },
   extraReducers: {
@@ -37,7 +37,5 @@ export const infoModalSlice = createSlice({
 
 export const { setInfoModalMovieId, setInfoModalStatus } =
   infoModalSlice.actions;
-
-// export const selectInfoModalState = (state: AppState) => state.infoModal;
 
 export default infoModalSlice.reducer;

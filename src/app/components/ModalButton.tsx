@@ -1,13 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { AppStore } from "../store/store";
-
-// declare global {
-//   interface Window {
-//     nextChunk: (parametro: any) => void;
-//   }
-// }
 
 interface ModalButtonProps {
   option: string;

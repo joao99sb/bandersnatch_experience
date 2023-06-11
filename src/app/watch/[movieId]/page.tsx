@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { getMovieFromId } from "@/app/api";
+import { MovieInterface } from "@/app/components/types";
 
 interface WatchParams {
   params: {
@@ -11,8 +12,13 @@ interface WatchParams {
 }
 
 export default function Watch({ params }: WatchParams) {
+  const [movie, setMovie] = useState<MovieInterface>({} as MovieInterface);
   const router = useRouter();
-  const movie = getMovieFromId(params.movieId);
+
+  useEffect(() => {
+    const movieFromApi = getMovieFromId(params.movieId) as MovieInterface;
+    setMovie(movieFromApi);
+  }, []);
   return (
     <div
       className="

@@ -39,14 +39,8 @@ export default async function Streaming() {
       modal.current.style.display = "none";
     }
   }, []);
-  const openModal = useCallback(() => {
-    if (modal.current) {
-      modal.current.style.display = "flex";
-    }
-  }, []);
 
   const getBackRouter = useCallback(() => {
-    videoMediaPlayer.clearInterval();
     router.back();
   }, [videoMediaPlayer]);
 
@@ -78,10 +72,10 @@ export default async function Streaming() {
           onClick={getBackRouter}
         />
         <p className=" text-white text-1xl md:text-3xl font-bold ">
-          <span className=" font-light ">Whatching: </span>
+          <span className=" font-light ">Whatching: Bandersnatch Experience</span>
         </p>
       </nav>
-      <video ref={videoRef} autoPlay controls className="h-full w-full"></video>
+      <video ref={videoRef} autoPlay className="h-full w-full"></video>
       <div
         ref={modal}
         className={`

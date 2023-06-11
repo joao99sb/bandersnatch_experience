@@ -7,7 +7,6 @@ import { PlayButton } from "./PlayButton";
 import { FavoriteButton } from "./FavoriteButton";
 import { useSelector, useDispatch } from "react-redux";
 import { setInfoModalStatus } from "../store/infoModal";
-import { getMovieFromId } from "../api";
 import { AppStore } from "../store/store";
 import { MovieInterface } from "./types";
 
@@ -17,17 +16,11 @@ interface InfoModalProps {
 
 export const InfoModal: React.FC<InfoModalProps> = ({ visible }) => {
   const [isVisible, setIsVisible] = useState(!!visible);
-  const [movie, setMovie] = useState<MovieInterface>({} as MovieInterface);
   const dispatch = useDispatch();
 
-  const movieId = useSelector((state: AppStore) => state.infoModal.modalId);
-
-  useEffect(() => {
-    const movie = getMovieFromId(movieId || 0);
-    if (movie) {
-      setMovie(movie);
-    }
-  }, [movieId]);
+  const movie = useSelector(
+    (state: AppStore) => state.infoModal.movie
+  ) as unknown as MovieInterface;
   useEffect(() => {
     setIsVisible(!!visible);
   }, [visible]);
@@ -114,29 +107,14 @@ export const InfoModal: React.FC<InfoModalProps> = ({ visible }) => {
             "
             onClick={handleClose}
           >
-            <AiOutlineClose className="text-white" size={20} />
+            <AiOutlineClose className="text-white " size={20} />
           </div>
 
-          <div
-            className="    
-              absolute
-              bottom-[10%]
-              left-10
-            "
-          >
-            <p
-              className="
-            text-white
-              text-3xl
-              md:text-4xl
-              h-full
-              lg:text-5xl
-              font-bold
-              mb-80
-            "
-            >
+          <div className="absolute bottom-[10%] left-10">
+            <p className="text-white text-3xl md:text-4xl h-full lg:text-5xl font-bold mb-8">
               {movie?.title}
             </p>
+
             <div
               className="
               flex
@@ -162,8 +140,6 @@ export const InfoModal: React.FC<InfoModalProps> = ({ visible }) => {
           >
             New
           </p>
-          <p className="text-white text-lg">{movie?.duration}</p>
-          <p className="text-white text-lg">{movie?.genre}</p>
           <p className="text-white text-lg">{movie?.description}</p>
         </div>
       </div>
