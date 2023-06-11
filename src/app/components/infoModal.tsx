@@ -46,6 +46,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ visible }) => {
       flex
       justify-center
       items-center
+      flex-wrap
       overflow-x-hidden
       overflow-y-auto
       fixed
@@ -60,7 +61,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ visible }) => {
           max-w-3xl
           rounded-md
           overflow-hidden
-          
+          flex-wrap
         "
       >
         <div
