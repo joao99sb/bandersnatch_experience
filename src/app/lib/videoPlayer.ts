@@ -94,7 +94,6 @@ export class VideoMediaPlayer {
 
   private async fileDownload(url: string) {
     const fileResolution = await this.currentFileResolution();
-    console.log({ fileResolution });
     const preparedURL = {
       url,
       fileResolution: fileResolution as string,
