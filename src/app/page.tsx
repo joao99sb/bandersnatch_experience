@@ -21,7 +21,10 @@ export default function Home() {
       <Navbar />
       <Billboard />
       <div className="pb-40">
-        <MovieList title="Trending Nows" data={moviesData} />
+        <MovieList
+          title="Trending Nows"
+          data={moviesData as MovieInterface[]}
+        />
       </div>
     </>
   );
