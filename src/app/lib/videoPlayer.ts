@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { createRoot } from "react-dom/client";
 import { Network } from "./network";
-import { ModalButton } from "../components/ModalButton";
 import { buttonFunction } from "./func";
 
 type objectJSONType = Record<string, any>;

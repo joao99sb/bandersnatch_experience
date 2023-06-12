@@ -17,7 +17,7 @@ export default async function Streaming() {
 
     const host = isLocal ? MANIFEST_URL.localHost : MANIFEST_URL.productionHost;
 
-    const network = new Network(host);
+    const network = new Network(globalThis.window?.location.hostname);
 
     const videoMediaPlayer = new VideoMediaPlayer({
       manifestJSON: MANIFEST_URL,
