@@ -95,4 +95,5 @@ export default async function Streaming() {
       </div>
     );
   }
+  return null
 }
