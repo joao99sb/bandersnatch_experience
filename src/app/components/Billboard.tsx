@@ -27,8 +27,10 @@ export const Billboard = () => {
       hostTag: MANIFEST.hostTag,
       url,
     });
-    moviesData.videoUrl = finalUrl;
-    setMovie(moviesData);
+    if (!moviesData.videoUrl) {
+      moviesData.videoUrl = finalUrl;
+      setMovie(moviesData);
+    }
   }, [movie]);
 
   const handleInfoModal = useCallback(() => {

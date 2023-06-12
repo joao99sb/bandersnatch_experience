@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 import { Network } from "./network";
@@ -69,6 +69,20 @@ export class VideoMediaPlayer {
       this.setIntervalId = null;
     }
   }
+
+  public currentFileResolution() {
+    const lowest_resolution = "144";
+    const preparedURL = {
+      url: this.manifestJSON.finalizar.url,
+      fileResolution: lowest_resolution,
+      fileResolutionTag: this.manifestJSON.fileResolutionTag,
+      hostTag: this.manifestJSON.hostTag,
+    };
+
+    const url = this.network.parseManifestURL(preparedURL);
+    return this.network.getProperResolution(url);
+  }
+
   private async handleSourceOpen(mediaSource: MediaSource) {
     this.sourceBuffer = mediaSource.addSourceBuffer(this.manifestJSON.codec);
     this.selectedPart = this.manifestJSON.intro;
@@ -81,9 +95,11 @@ export class VideoMediaPlayer {
   }
 
   private async fileDownload(url: string) {
+    const fileResolution = await this.currentFileResolution();
+    console.log({ fileResolution });
     const preparedURL = {
       url,
-      fileResolution: "360",
+      fileResolution: fileResolution as string,
       fileResolutionTag: this.manifestJSON.fileResolutionTag,
       hostTag: this.manifestJSON.hostTag,
     };
@@ -111,6 +127,7 @@ export class VideoMediaPlayer {
       at: parseInt(this.videoElement.current?.currentTime + selected.at),
     };
 
+    this.manageLag(this.selectedPart);
     this.videoElement.current?.play();
     await this.fileDownload(selected.url);
   }
@@ -154,5 +171,13 @@ export class VideoMediaPlayer {
       sourceBuffer.addEventListener("updateend", updateEnd);
       sourceBuffer.addEventListener("error", reject);
     });
+  }
+
+  private manageLag(selected: any) {
+    if (!!~this.selectedPart.indexOf(selected.url)) {
+      selected.at = 5 + Number(selected.at);
+      return;
+    }
+    this.selectedPart.push(selected.url);
   }
 }
