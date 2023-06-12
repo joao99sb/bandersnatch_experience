@@ -7,13 +7,13 @@ import { InfoModal } from "./components/infoModal";
 import { useSelector, useDispatch } from "react-redux";
 import { AppStore } from "./store/store";
 import { setInfoModalMovieId, setInfoModalStatus } from "./store/infoModal";
+import { MovieInterface } from "./components/types";
 
 export default function Home() {
-  const moviesData = getMovies();
+  const moviesData = getMovies() as unknown as MovieInterface[];
   const isOpen = useSelector(
     (state: AppStore) => state.infoModal.infoModalStatus
   );
-
 
   return (
     <>
