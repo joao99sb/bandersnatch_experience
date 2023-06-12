@@ -13,7 +13,7 @@ export default async function Streaming() {
   const router = useRouter();
 
   useEffect(() => {
-    const isLocal = !!~localhost.indexOf(window.location.hostname);
+    const isLocal = !!~localhost.indexOf(globalThis.window?.location.hostname);
 
     const host = isLocal ? MANIFEST_URL.localHost : MANIFEST_URL.productionHost;
 
