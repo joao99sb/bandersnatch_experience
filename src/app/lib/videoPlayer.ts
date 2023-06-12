@@ -127,7 +127,6 @@ export class VideoMediaPlayer {
       at: parseInt(this.videoElement.current?.currentTime + selected.at),
     };
 
-    this.manageLag(this.selectedPart);
     this.videoElement.current?.play();
     await this.fileDownload(selected.url);
   }
@@ -173,11 +172,5 @@ export class VideoMediaPlayer {
     });
   }
 
-  private manageLag(selected: any) {
-    if (!!~this.selectedPart.indexOf(selected.url)) {
-      selected.at = 5 + Number(selected.at);
-      return;
-    }
-    this.selectedPart.push(selected.url);
-  }
+
 }
