@@ -11,6 +11,9 @@ export default async function Streaming() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const modal = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null
+  }
 
   const isLocal = !!~localhost.indexOf(window.location.hostname);
 
@@ -72,7 +75,9 @@ export default async function Streaming() {
           onClick={getBackRouter}
         />
         <p className=" text-white text-1xl md:text-3xl font-bold ">
-          <span className=" font-light ">Whatching: Bandersnatch Experience</span>
+          <span className=" font-light ">
+            Whatching: Bandersnatch Experience
+          </span>
         </p>
       </nav>
       <video ref={videoRef} autoPlay className="h-full w-full"></video>
