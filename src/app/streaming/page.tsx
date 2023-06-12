@@ -13,7 +13,7 @@ export default async function Streaming() {
   const router = useRouter();
 
   let isLocal;
-  if (typeof window === "undefined") {
+  if (!window) {
     isLocal = false;
   }
 
