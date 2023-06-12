@@ -14,7 +14,7 @@ export const Billboard = () => {
   const [movie, setMovie] = useState<MovieInterface>({} as MovieInterface);
   const dispatch = useDispatch();
 
-  const isLocal = !!~localhost.indexOf(window.location.hostname);
+  const isLocal = !!~localhost.indexOf(globalThis.window?.location.hostname);
 
   const host = isLocal ? MANIFEST.localHost : MANIFEST.productionHost;
   const network = new Network(host);
