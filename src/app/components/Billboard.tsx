@@ -16,7 +16,7 @@ export const Billboard = () => {
 
   const isLocal = !!~localhost.indexOf(globalThis.window?.location.hostname);
 
-  const host = isLocal ? MANIFEST.localHost : MANIFEST.productionHost;
+  const host = isLocal ? MANIFEST.localHost : (process.env.PROD_URL as string);
   const network = new Network(host);
 
   useEffect(() => {
@@ -30,7 +30,6 @@ export const Billboard = () => {
 
     moviesData.videoUrl = finalUrl;
     setMovie(moviesData);
-
   }, [movie]);
 
   const handleInfoModal = useCallback(() => {

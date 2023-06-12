@@ -15,7 +15,9 @@ export default async function Streaming() {
   useEffect(() => {
     const isLocal = !!~localhost.indexOf(globalThis.window?.location.hostname);
 
-    const host = isLocal ? MANIFEST_URL.localHost : MANIFEST_URL.productionHost;
+    const host = isLocal
+      ? MANIFEST_URL.localHost
+      : (process.env.PROD_URL as string);
 
     const network = new Network(host);
 
