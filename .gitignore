@@ -34,7 +34,3 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/database/videos/01.intro/
-/database/videos/02.guitarra/
-/database/videos/02.violao/
-/database/videos/03.encerramento/
