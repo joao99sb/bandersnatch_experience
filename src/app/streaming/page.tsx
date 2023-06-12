@@ -11,11 +11,13 @@ export default async function Streaming() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const modal = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  let isLocal;
   if (typeof window === "undefined") {
-    return null
+    isLocal = false;
   }
 
-  const isLocal = !!~localhost.indexOf(window.location.hostname);
+  isLocal = !!~localhost.indexOf(window.location.hostname);
 
   const host = isLocal ? MANIFEST_URL.localHost : MANIFEST_URL.productionHost;
 
