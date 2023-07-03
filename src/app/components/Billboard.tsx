@@ -16,7 +16,7 @@ export const Billboard = () => {
 
   const isLocal = !!~localhost.indexOf(globalThis.window?.location.hostname);
 
-  const host = isLocal ? MANIFEST.localHost : (process.env.PROD_URL as string);
+  const host = isLocal ? MANIFEST.localHost : (process.env.NEXT_PUBLIC_PROD_URL as string);
   console.log({ host });
   const network = new Network(host);
 
