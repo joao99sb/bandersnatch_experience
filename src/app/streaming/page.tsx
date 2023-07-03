@@ -17,7 +17,7 @@ export default async function Streaming() {
 
     const host = isLocal
       ? MANIFEST_URL.localHost
-      : (process.env.NEXT_PUBLIC_PROD_URL as string);
+      : (process.env.PROD_URL as string);
 
     const network = new Network(host);
 
